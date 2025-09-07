@@ -28,7 +28,7 @@ trống, giới hạn độ dài), xử lý chính xác số rất lớn/nhỏ b
 
 ------------------------------------------------------------------------
 
-## Yêu cầu chức năng (chi tiết, theo thứ tự)
+## Yêu cầu chức năng
 
 1.  **Phạm vi nhập:** nhận các số thực, gồm dấu +/-, phần nguyên và phần
     thập phân.
