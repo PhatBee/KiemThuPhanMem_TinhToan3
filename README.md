@@ -17,3 +17,12 @@ Specifications for the Simple Calculator program
 6.	Khi đã nhập đủ 2 số (hợp lệ) và chọn phép tính tương ứng rồi nhấn nút tính, chương trình sẽ hiển thị kết quả của phép tính ở ô kết quả. Nội dung của ô này không thể sửa đổi được trong bất kỳ trường hợp nào.
 7.	Khi thực hiện phép tính chia, nếu số chia là 0 thì chương trình hiện thông báo lỗi và đặt focus vào ô số thứ 2 để người dùng nhập lại giá trị khác.
 8.	Khi người dùng nhấn vào nút Thoát, chương trình sẽ hiện hộp thoại xác nhận xem người dùng có thực sự muốn thoát hay không. Nếu người dùng đồng ý thoát thì sẽ đóng chương trình, ngược lại sẽ quay trở lại chương trình.
+
+Các điểm cải thiện trong bài gồm
+- Kiểm tra phép chia với 0
+- Kiểm tra nhập vào những ký tự lạ
+- Kiểm tra nhập để trống
+- Kiểm tra độ dài vượt quá 30 số
+- Kiểm tra chính xác những phép tính với số cực lớn
+- Kiểm tra chính xác những phép tính với số cực nhỏ
+- Thực hiện trình tự các bước và thông báo như đặc tả yêu cầu
