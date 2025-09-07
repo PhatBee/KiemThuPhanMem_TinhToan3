@@ -56,9 +56,12 @@ trống, giới hạn độ dài), xử lý chính xác số rất lớn/nhỏ b
 
 ## Các điểm cải thiện trong bài gồm
 - Kiểm tra phép chia với 0
-- Kiểm tra nhập vào những ký tự lạ
-- Kiểm tra nhập để trống
-- Kiểm tra độ dài vượt quá 30 số
+- Kiểm tra nhập vào những ký tự lạ không phải số ở ô thứ nhất
+- Kiểm tra nhập vào những ký tự lạ không phải số ở ô thứ hai
+- Kiểm tra để trống ô thứ nhất
+- Kiểm tra để trống ô thứ hai
+- Kiểm tra độ dài vượt quá 30 số ở ô thứ nhất
+- Kiểm tra độ dài vượt quá 30 số ở ô thứ hai
 - Kiểm tra chính xác những phép tính với số cực lớn
 - Kiểm tra chính xác những phép tính với số cực nhỏ
 - Thực hiện trình tự các bước và thông báo như đặc tả yêu cầu
