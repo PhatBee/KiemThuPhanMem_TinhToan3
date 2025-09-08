@@ -38,10 +38,10 @@
             this.txtSo1 = new System.Windows.Forms.TextBox();
             this.label1 = new System.Windows.Forms.Label();
             this.groupBox1 = new System.Windows.Forms.GroupBox();
-            this.radCong = new System.Windows.Forms.RadioButton();
-            this.radTru = new System.Windows.Forms.RadioButton();
-            this.radNhan = new System.Windows.Forms.RadioButton();
             this.radChia = new System.Windows.Forms.RadioButton();
+            this.radNhan = new System.Windows.Forms.RadioButton();
+            this.radTru = new System.Windows.Forms.RadioButton();
+            this.radCong = new System.Windows.Forms.RadioButton();
             this.groupBox1.SuspendLayout();
             this.SuspendLayout();
             // 
@@ -147,29 +147,18 @@
             this.groupBox1.TabIndex = 20;
             this.groupBox1.TabStop = false;
             // 
-            // radCong
+            // radChia
             // 
-            this.radCong.AutoSize = true;
-            this.radCong.Font = new System.Drawing.Font("Microsoft Sans Serif", 10F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
-            this.radCong.Location = new System.Drawing.Point(15, 21);
-            this.radCong.Name = "radCong";
-            this.radCong.Size = new System.Drawing.Size(59, 21);
-            this.radCong.TabIndex = 0;
-            this.radCong.TabStop = true;
-            this.radCong.Text = "Cộng";
-            this.radCong.UseVisualStyleBackColor = true;
-            // 
-            // radTru
-            // 
-            this.radTru.AutoSize = true;
-            this.radTru.Font = new System.Drawing.Font("Microsoft Sans Serif", 10F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
-            this.radTru.Location = new System.Drawing.Point(15, 44);
-            this.radTru.Name = "radTru";
-            this.radTru.Size = new System.Drawing.Size(48, 21);
-            this.radTru.TabIndex = 1;
-            this.radTru.TabStop = true;
-            this.radTru.Text = "Trừ";
-            this.radTru.UseVisualStyleBackColor = true;
+            this.radChia.AutoSize = true;
+            this.radChia.Font = new System.Drawing.Font("Microsoft Sans Serif", 10F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
+            this.radChia.Location = new System.Drawing.Point(85, 44);
+            this.radChia.Name = "radChia";
+            this.radChia.Size = new System.Drawing.Size(54, 21);
+            this.radChia.TabIndex = 3;
+            this.radChia.TabStop = true;
+            this.radChia.Text = "Chia";
+            this.radChia.UseVisualStyleBackColor = true;
+            this.radChia.CheckedChanged += new System.EventHandler(this.radChia_CheckedChanged);
             // 
             // radNhan
             // 
@@ -183,17 +172,29 @@
             this.radNhan.Text = "Nhân";
             this.radNhan.UseVisualStyleBackColor = true;
             // 
-            // radChia
+            // radTru
             // 
-            this.radChia.AutoSize = true;
-            this.radChia.Font = new System.Drawing.Font("Microsoft Sans Serif", 10F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
-            this.radChia.Location = new System.Drawing.Point(85, 44);
-            this.radChia.Name = "radChia";
-            this.radChia.Size = new System.Drawing.Size(54, 21);
-            this.radChia.TabIndex = 3;
-            this.radChia.TabStop = true;
-            this.radChia.Text = "Chia";
-            this.radChia.UseVisualStyleBackColor = true;
+            this.radTru.AutoSize = true;
+            this.radTru.Font = new System.Drawing.Font("Microsoft Sans Serif", 10F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
+            this.radTru.Location = new System.Drawing.Point(15, 44);
+            this.radTru.Name = "radTru";
+            this.radTru.Size = new System.Drawing.Size(48, 21);
+            this.radTru.TabIndex = 1;
+            this.radTru.TabStop = true;
+            this.radTru.Text = "Trừ";
+            this.radTru.UseVisualStyleBackColor = true;
+            // 
+            // radCong
+            // 
+            this.radCong.AutoSize = true;
+            this.radCong.Font = new System.Drawing.Font("Microsoft Sans Serif", 10F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
+            this.radCong.Location = new System.Drawing.Point(15, 21);
+            this.radCong.Name = "radCong";
+            this.radCong.Size = new System.Drawing.Size(59, 21);
+            this.radCong.TabIndex = 0;
+            this.radCong.TabStop = true;
+            this.radCong.Text = "Cộng";
+            this.radCong.UseVisualStyleBackColor = true;
             // 
             // Form1
             // 

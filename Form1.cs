@@ -5,6 +5,7 @@ using System.Data;
 using System.Drawing;
 using System.Linq;
 using System.Text;
+using System.Text.RegularExpressions;
 using System.Threading.Tasks;
 using System.Windows.Forms;
 
@@ -15,6 +16,9 @@ namespace Buoi07_TinhToan3
         public Form1()
         {
             InitializeComponent();
+
+            txtSo1.Validating += TxtSo_Validating;
+            txtSo2.Validating += TxtSo_Validating;
         }
 
         private void Form1_Load(object sender, EventArgs e)
@@ -45,6 +49,39 @@ namespace Buoi07_TinhToan3
             else if (radChia.Checked && so2 != 0) kq = so1 / so2;
             //Hiển thị kết quả lên trên ô kết quả
             txtKq.Text = kq.ToString();
+        }
+
+        private void radChia_CheckedChanged(object sender, EventArgs e)
+        {
+            if (txtSo2.Text == "0")
+            {
+                MessageBox.Show("Không thể chia cho số 0. Vui lòng nhập lại 'Số thứ hai'","Lỗi nhập liệu", MessageBoxButtons.OK, MessageBoxIcon.Error);
+                txtSo2.Focus();
+                return;
+            }
+        }
+
+        private void TxtSo_Validating(object sender, CancelEventArgs e)
+        {
+            TextBox tb = sender as TextBox;
+
+            // Kiểm tra rỗng
+            if (string.IsNullOrWhiteSpace(tb.Text))
+            {
+                MessageBox.Show("Ô số không được để trống!", "Lỗi nhập liệu",
+                    MessageBoxButtons.OK, MessageBoxIcon.Error);
+                e.Cancel = true;
+                return;
+            }
+
+            // Kiểm tra số đúng định dạng hay không
+            string pattern = @"^-?\d+([.,]\d+)?$";
+            if (!Regex.IsMatch(tb.Text, pattern))
+            {
+                MessageBox.Show("Nhập dữ liệu sai định dạng vui lòng kiểm tra lại!!!", "Lỗi nhập liệu",
+                    MessageBoxButtons.OK, MessageBoxIcon.Error);
+                e.Cancel = true;
+            }
         }
     }
 }
