@@ -75,7 +75,7 @@ namespace Buoi07_TinhToan3
             }
 
             // Kiểm tra số đúng định dạng hay không
-            string pattern = @"^-?\d+([.,]\d+)?$";
+            string pattern = @"^[+-]?\d+([.,]\d+)?$";
             if (!Regex.IsMatch(tb.Text, pattern))
             {
                 MessageBox.Show("Nhập dữ liệu sai định dạng vui lòng kiểm tra lại!!!", "Lỗi nhập liệu",
