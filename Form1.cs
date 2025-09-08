@@ -3,6 +3,7 @@ using System.Collections.Generic;
 using System.ComponentModel;
 using System.Data;
 using System.Drawing;
+using System.Globalization;
 using System.Linq;
 using System.Text;
 using System.Text.RegularExpressions;
@@ -68,20 +69,34 @@ namespace Buoi07_TinhToan3
             // Kiểm tra rỗng
             if (string.IsNullOrWhiteSpace(tb.Text))
             {
-                MessageBox.Show("Ô số không được để trống!", "Lỗi nhập liệu",
-                    MessageBoxButtons.OK, MessageBoxIcon.Error);
-                e.Cancel = true;
+                errorProvider1.SetError(tb, "Ô không được để trống!");
+                btnTinh.Enabled = false;
+                return;
+            }
+
+            // Kiểm tra độ dài chuỗi
+            if (tb.Text.Length > 30)
+            {
+                errorProvider1.SetError(tb, "Số không được vượt quá 30 ký tự!");
+                btnTinh.Enabled = false;
                 return;
             }
 
             // Kiểm tra số đúng định dạng hay không
-            string pattern = @"^[+-]?\d+([.,]\d+)?$";
-            if (!Regex.IsMatch(tb.Text, pattern))
+            if (!double.TryParse(tb.Text,
+                                 NumberStyles.Float | NumberStyles.AllowThousands,
+                                 CultureInfo.InvariantCulture,
+                                 out _))
             {
-                MessageBox.Show("Nhập dữ liệu sai định dạng vui lòng kiểm tra lại!!!", "Lỗi nhập liệu",
-                    MessageBoxButtons.OK, MessageBoxIcon.Error);
-                e.Cancel = true;
+                errorProvider1.SetError(tb, "Số không hợp lệ!");
+                btnTinh.Enabled = false;
+                return;
             }
+
+            // Xóa lỗi nếu mọi thứ hợp lệ
+            errorProvider1.SetError(tb, "");
+            if (errorProvider1.GetError(txtSo1) == "" && errorProvider1.GetError(txtSo2) == "")
+                btnTinh.Enabled = true;
         }
     }
 }
