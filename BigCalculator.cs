@@ -303,5 +303,84 @@ namespace Buoi07_TinhToan3
                 return "0";
             return isNegative ? "-" + f : f; 
         }
+
+        public static string MultiplyNumbers(string so1Str, string so2Str)
+        {
+            // Tách dấu phần nguyên và phần thập phân
+            ParseNumber(so1Str, out bool negA, out string intA, out string fracA);
+            ParseNumber(so2Str, out bool negB, out string intB, out string fracB);
+
+            string raw = MultiplyAbs(intA,  intB, fracA, fracB);
+
+            string formatted = FormatResult(raw);
+            if (formatted == "0")
+                return "0";
+            bool resNeg = negA ^ negB;
+
+            return resNeg ? "-" + formatted : formatted;
+        }
+
+        private static string MultiplyAbs(string intA, string intB, string fracA, string fracB)
+        {
+            // Lấy tất cả phần nguyên và phần thập phân
+            string wholeA = intA + fracA;
+            string wholeB = intB + fracB;
+
+            // Xoá các số 0 thừa (giữ lại 1 số 0) 
+            wholeA = wholeA.TrimStart('0');
+            if (wholeA == "")
+                wholeA = "0";
+            wholeB = wholeB.TrimStart('0');
+            if (wholeB == "")
+                wholeB = "0";
+
+            // Nếu whole đúng bằng 0
+            if (wholeA == "0" || wholeB == "0")
+                return "0";
+
+            int n = wholeA.Length;
+            int m = wholeB.Length;
+            int[] res = new int[n + m];
+
+            // Nhân từ phải sang trái
+            for (int i = n - 1; i >= 0; i--)
+            {
+                int ai = wholeA[i] - '0';
+                for (int j = m - 1; j >= 0; j--)
+                {
+                    int bj = wholeB[j] - '0';
+                    int posLow = i + j + 1;
+                    int mul = ai * bj + res[posLow];
+                    res[posLow] = mul % 10;
+                    res[posLow - 1] += mul / 10; // Nhớ đến cột phía trước
+                }
+            }
+
+            // Chuyển mảng thành chuỗi
+            StringBuilder sb = new StringBuilder();
+            foreach (int d in res)
+                sb.Append((char)('0' + d));
+            string productStr = sb.ToString().TrimStart('0');
+            if (productStr == "")
+                productStr = "0";
+
+            // Thêm phần thập phân
+            int totalFrac = fracA.Length + fracB.Length;
+            if (totalFrac == 0)
+                return productStr;
+
+            int pLen = productStr.Length;
+            if (pLen > totalFrac)
+            {
+                string intPart = productStr.Substring(0, pLen - totalFrac);
+                string fracPart = productStr.Substring(pLen - totalFrac);
+                return intPart + "." + fracPart;
+            }
+            else // Phần nguyên là 0
+            {
+                string fracPart = productStr.PadLeft(totalFrac, '0');
+                return "0." + fracPart;
+            }
+        }
     }
 }
