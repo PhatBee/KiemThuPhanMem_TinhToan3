@@ -3,6 +3,7 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
+using System.Windows.Forms;
 
 namespace Buoi07_TinhToan3
 {
@@ -251,6 +252,56 @@ namespace Buoi07_TinhToan3
                 intPart = s;
                 fracPart = "";
             }
+        }
+
+        public static string SubtractNumbers(string so1Str, string so2Str)
+        {
+            // Tách dấu phần nguyên và phần thập phân
+            ParseNumber(so1Str, out bool negA, out string intA, out string fracA);
+            ParseNumber(so2Str, out bool negB, out string intB, out string fracB);
+
+            // Cùng dương --> A - B
+            if (!negA && !negB)
+            {
+                int cmp = CompareAbs(intA, fracA, intB, fracB);
+                if (cmp == 0)
+                    return "0";
+                if (cmp > 0)
+                    return FormatWithSign(SubtractAbs(intA, fracA, intB, fracB), false);
+                else
+                    return FormatWithSign(SubtractAbs(intB, fracB, intA, fracA), true); // Số âm
+            }
+
+            // Cùng âm --> -A - (-B) = B - A
+            if (negA && negB) 
+            {
+                int cmp = CompareAbs(intB, fracB, intA, fracA);
+                if (cmp == 0)
+                    return "0";
+                if (cmp > 0)
+                    return FormatWithSign(SubtractAbs(intA, fracA, intB, fracB), false);
+                else
+                    return FormatWithSign(SubtractAbs(intB, fracB, intA, fracA), true); // Số âm
+            }
+
+            // A dương, B âm --> A - (-B) = A + |B|
+            if (negA && !negB)
+            {
+                string sumAbs = AddAbs(intA, fracA, intB, fracB);
+                return FormatWithSign(sumAbs, false);
+            }
+
+            // A âm, B dương --> -A - B = - ( |A| + |B| )
+            string sum = AddAbs(intA, fracA, fracB, fracB);
+            return FormatWithSign(sum, true);
+        }
+
+        private static string FormatWithSign(string raw, bool isNegative)
+        {
+            string f = FormatResult(raw);
+            if (f == "0")
+                return "0";
+            return isNegative ? "-" + f : f; 
         }
     }
 }
