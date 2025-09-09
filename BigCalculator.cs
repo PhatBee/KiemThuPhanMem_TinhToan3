@@ -382,5 +382,228 @@ namespace Buoi07_TinhToan3
                 return "0." + fracPart;
             }
         }
+                
+        public static string DivideNumbers(string so1Str, string so2Str, int precision = 30, bool rounding = true)
+        // precision: Số chữ số thập phân tối đa trả về
+        // rounding: làm tròn
+        {
+            // Tách dấu phần nguyên và phần thập phân
+            ParseNumber(so1Str, out bool negA, out string intA, out string fracA);
+            ParseNumber(so2Str, out bool negB, out string intB, out string fracB);
+
+            // Kiểm tra chia với 0
+            if (TrimLeadingZeros(intB) == "0" && (string.IsNullOrEmpty(fracB) || TrimLeadingZeros(fracB) == "0"))
+                throw new DivideByZeroException("Chia cho 0");
+
+            // Lấy tất cả phần nguyên và phần thập phân
+            string wholeA = TrimLeadingZeros(intA + (fracA ?? ""));
+            string wholeB = TrimLeadingZeros(intB + (fracB ?? ""));
+
+            // Từ fracA và fracB (độ dài phần thập phân), scale số để chia hai số nguyên
+            // numerator = wholeA * 10 ^{ len(fracB)}
+            // denominator = wholeB * 10 ^{ len(fracA)}
+            string numerator = wholeA + new string('0', (fracB ?? "").Length);
+            string denominator = wholeB + new string('0', (fracA ?? "").Length);
+
+            numerator = TrimLeadingZeros(numerator);
+            denominator = TrimLeadingZeros(denominator);
+
+            // Chia lấy phần nguyên và phần dư
+            var qr = DivideIntegerStrings(numerator, denominator);
+            string integerPart = qr.quotient;
+            string remainder = qr.remainder;
+
+            // Xử lý phần dư
+            List<char> fracDigits = new List<char>();
+            if (remainder != "0")
+            {
+                // Tính toán làm tròn
+                int target = precision;
+                int maxCompute = precision + (rounding ? 1 : 0);
+                for (int i = 0; i < maxCompute && remainder != "0"; i++)
+                {
+                    // Nhân 10 Reminder tiếp tục chia lấy phần thập phân
+                    remainder = remainder + "0";
+                    var qr2 = DivideIntegerStrings(remainder, denominator);
+                    string digitStr = qr2.quotient; // lấy phần thương (0 --> 9))
+
+                    string d = TrimLeadingZeros(digitStr);
+                    if (d == "") d = "0";
+
+                    // Đảm bảo kết quả chỉ từ (0 --> 9)
+                    foreach (char c in d) fracDigits.Add(c);
+                    remainder = qr2.remainder;
+                }
+            }
+
+            // Xử lý làm tròn
+            if (rounding && fracDigits.Count > precision)
+            {
+                // Lấy số cuối thập phân kiểm tra làm tròn chỉ số
+                char extra = fracDigits[precision];
+                // Cắt
+                fracDigits.RemoveRange(precision, fracDigits.Count - precision);
+                if (extra >= '5') // Lớn hơn 5 làm tròn 
+                {
+                    int carry = 1;
+                    for (int i = fracDigits.Count - 1; i >= 0 && carry > 0; i--)
+                    {
+                        int d = (fracDigits[i] - '0') + carry;
+                        fracDigits[i] = (char)('0' + (d % 10));
+                        carry = d / 10;
+                    }
+                    if (carry > 0)
+                    {
+                        // Nếu làm tròn qua phần nguyên
+                        integerPart = (integerPart == "" ? "0" : integerPart);
+                        integerPart = AddOneToIntegerString(integerPart);
+                    }
+                }
+            }
+            else
+            {
+                // Cắt
+                if (fracDigits.Count > precision) 
+                    fracDigits.RemoveRange(precision, fracDigits.Count - precision);
+            }
+
+            // Kết quả
+            string fracStr = fracDigits.Count > 0 ? new string(fracDigits.ToArray()) : "";
+            if (string.IsNullOrEmpty(integerPart)) 
+                integerPart = "0";
+            string raw = string.IsNullOrEmpty(fracStr) ? integerPart : (integerPart + "." + fracStr);
+
+            bool resultNeg = negA ^ negB;
+            return FormatWithSign(raw, resultNeg);
+        }
+
+        private static string AddOneToIntegerString(string s)
+        {
+            // s là chuỗi số không âm, cộng thêm 1
+            StringBuilder sb = new StringBuilder();
+            int carry = 1;
+            for (int i = s.Length - 1; i >= 0; i--)
+            {
+                int d = s[i] - '0';
+                int sum = d + carry;
+                sb.Append((char)('0' + (sum % 10)));
+                carry = sum / 10;
+            }
+            if (carry > 0) sb.Append((char)('0' + carry));
+            var res = Reverse(sb.ToString());
+            return TrimLeadingZeros(res);
+        }
+
+        private static (string quotient, string remainder) DivideIntegerStrings(string numerator, string denominator)
+        {
+            numerator = TrimLeadingZeros(numerator);
+            denominator = TrimLeadingZeros(denominator);
+            if (denominator == "0") throw new DivideByZeroException();
+
+            // Nếu tử số nhỏ hơn mẫu số
+            if (CompareNumericStrings(numerator, denominator) < 0) return ("0", numerator);
+
+            StringBuilder quotient = new StringBuilder();
+            StringBuilder current = new StringBuilder();
+
+            foreach (char ch in numerator)
+            {
+                // Lấy số tiếp theo
+                if (!(current.Length == 1 && current[0] == '0')) // Bỏ qua số 0 đứng đầu
+                    current.Append(ch);
+                else
+                {
+                    // Nếu current = 0, chữ số mới thêm vào
+                    current[0] = ch;
+                }
+
+                string curStr = TrimLeadingZeros(current.ToString());
+                if (CompareNumericStrings(curStr, denominator) < 0)
+                {
+                    quotient.Append('0');
+                    current.Clear();
+                    current.Append(curStr); // Giữ curStr hiện tại và thêm tiếp theo vào phía sau 
+                    continue;
+                }
+
+                // Tìm kết quả thương qdigit (9 --> 1)
+                int qdigit = 0;
+                for (int d = 9; d >= 1; d--)
+                {
+                    string prod = MultiplyStringByDigit(denominator, d);
+                    if (CompareNumericStrings(prod, curStr) <= 0)
+                    {
+                        qdigit = d;
+                        current.Clear();
+                        current.Append(SubtractIntegerStrings(curStr, prod));
+                        break;
+                    }
+                }
+                quotient.Append((char)('0' + qdigit));
+            }
+
+            string q = TrimLeadingZeros(quotient.ToString());
+            string r = TrimLeadingZeros(current.ToString());
+            if (r == "") r = "0";
+            return (q, r);
+        }
+
+        private static string SubtractIntegerStrings(string a, string b)
+        {
+            // a > b, cả hai đều là số nguyên
+            a = TrimLeadingZeros(a);
+            b = TrimLeadingZeros(b);
+            int la = a.Length;
+            int lb = b.Length;
+            int carry = 0;
+
+            StringBuilder sb = new StringBuilder();
+            for (int i = 0; i < la; i++)
+            {
+                int ai = a[la - 1 - i] - '0';
+                int bi = (i < lb) ? b[lb - 1 - i] - '0' : 0;
+                int d = ai - bi - carry;
+                if (d < 0) { d += 10; carry = 1; } else carry = 0;
+                sb.Append((char)('0' + d));
+            }
+
+            var res = Reverse(sb.ToString());
+            return TrimLeadingZeros(res);
+        }
+
+        private static string MultiplyStringByDigit(string s, int digit)
+        {
+            if (digit == 0) return "0";
+            if (digit == 1) return TrimLeadingZeros(s);
+            int carry = 0;
+            StringBuilder sb = new StringBuilder();
+            for (int i = s.Length - 1; i >= 0; i--)
+            {
+                int prod = (s[i] - '0') * digit + carry;
+                sb.Append((char)('0' + (prod % 10)));
+                carry = prod / 10;
+            }
+            while (carry > 0) { sb.Append((char)('0' + (carry % 10))); carry /= 10; }
+            var res = Reverse(sb.ToString());
+            return TrimLeadingZeros(res);
+
+        }
+
+        private static int CompareNumericStrings(string a, string b)
+        {
+            a = TrimLeadingZeros(a); b = TrimLeadingZeros(b);
+            if (a.Length != b.Length) return a.Length > b.Length ? 1 : -1;
+            return string.CompareOrdinal(a, b);
+        }
+
+        private static string TrimLeadingZeros(string s)
+        {
+            if (string.IsNullOrEmpty(s)) return "0";
+            int i = 0;
+            while (i < s.Length - 1 && s[i] == '0') i++;
+            string t = s.Substring(i);
+            if (t == "") return "0";
+            return t;
+        }
     }
 }

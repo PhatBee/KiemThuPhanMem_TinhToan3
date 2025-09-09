@@ -50,7 +50,7 @@ namespace Buoi07_TinhToan3
             if (radCong.Checked) kqStr = BigCalculator.AddNumbers(so1Str, so2Str);
             else if (radTru.Checked) kqStr = BigCalculator.SubtractNumbers(so1Str, so2Str);
             else if (radNhan.Checked) kqStr = BigCalculator.MultiplyNumbers(so1Str, so2Str);
-            else if (radChia.Checked && so2 != 0) kq = so1 / so2;
+            else if (radChia.Checked && so2 != 0) kqStr = BigCalculator.DivideNumbers(so1Str, so2Str);
             //Hiển thị kết quả lên trên ô kết quả
             txtKq.Text = kqStr.ToString();
         }
