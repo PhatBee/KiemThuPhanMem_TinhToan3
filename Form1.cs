@@ -1,13 +1,6 @@
 ﻿using System;
-using System.Collections.Generic;
 using System.ComponentModel;
-using System.Data;
-using System.Drawing;
-using System.Globalization;
-using System.Linq;
-using System.Text;
 using System.Text.RegularExpressions;
-using System.Threading.Tasks;
 using System.Windows.Forms;
 
 namespace Buoi07_TinhToan3
@@ -40,7 +33,7 @@ namespace Buoi07_TinhToan3
         private void btnTinh_Click(object sender, EventArgs e)
         {
             //lấy giá trị của 2 ô số
-            double so1, so2, kq = 0;
+            double so1, so2;
             string kqStr = "";
             string so1Str = txtSo1.Text;
             string so2Str = txtSo2.Text;
@@ -86,10 +79,8 @@ namespace Buoi07_TinhToan3
             }
 
             // Kiểm tra số đúng định dạng hay không
-            if (!double.TryParse(tb.Text,
-                                 NumberStyles.Float | NumberStyles.AllowThousands,
-                                 CultureInfo.InvariantCulture,
-                                 out _))
+            string pattern = @"^[+-]?\d+(\.\d+)?$";
+            if (!Regex.IsMatch(tb.Text, pattern))
             {
                 errorProvider1.SetError(tb, "Số không hợp lệ!");
                 btnTinh.Enabled = false;
