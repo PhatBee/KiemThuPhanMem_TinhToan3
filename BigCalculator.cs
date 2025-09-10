@@ -277,13 +277,13 @@ namespace Buoi07_TinhToan3
                 if (cmp == 0)
                     return "0";
                 if (cmp > 0)
-                    return FormatWithSign(SubtractAbs(intA, fracA, intB, fracB), false);
+                    return FormatWithSign(SubtractAbs(intB, fracB, intA, fracA), false);
                 else
-                    return FormatWithSign(SubtractAbs(intB, fracB, intA, fracA), true); // Số âm
+                    return FormatWithSign(SubtractAbs(intA, fracA, intB, fracB), true); // Số âm
             }
 
             // A dương, B âm --> A - (-B) = A + |B|
-            if (negA && !negB)
+            if (!negA && negB)
             {
                 string sumAbs = AddAbs(intA, fracA, intB, fracB);
                 return FormatWithSign(sumAbs, false);
